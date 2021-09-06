@@ -6,6 +6,8 @@ const express = require('express');
 // 2. 建立 web server 物件
 const app = express();
 
+app.use(express.static('public'));
+
 // 3. 路由定義開始
 app.get('/', (req, res)=>{
     res.send(`<h2>Hello World!</h2>`);
