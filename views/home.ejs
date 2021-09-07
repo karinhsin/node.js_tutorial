@@ -1,1 +1,9 @@
-<h2>Hi, <%= name %></h2>
+<!-- 沒有要跳脫所以用-不是=，後面放相對路徑 -->
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<div class="container">
+    <h2>Hi, <%= name %></h2>
+</div>
+<%- include('parts/scripts') %>
+<%- include('parts/html-foot') %>

@@ -16,6 +16,7 @@ app.use('/jquery', express.static('node_modules/jquery/dist'));
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
 // 3. 路由定義開始
+//res.send  res.end   res.render 這三個不能同時用 一次只能用一個
 app.get('/', (req, res)=>{
     //第二個參數是要傳到樣版的內容
     res.render('home', {name:'Karin'});
