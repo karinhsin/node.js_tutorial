@@ -6,6 +6,9 @@ const express = require('express');
 // 2. 建立 web server 物件
 const app = express();
 
+// 註冊樣版引擎
+app.set('view engine','ejs');
+
 //這邊不要設定太多 管理上會比較麻煩
 app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略
 //如果沒引入進來 就要把jquery跟bootstrap放到public裡面
@@ -14,7 +17,10 @@ app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
 // 3. 路由定義開始
 app.get('/', (req, res)=>{
-    res.send(`<h2>Hello World!</h2>`);
+    //第二個參數是要傳到樣版的內容
+    res.render('home', {name:'Karin'});
+    //修改ejs樣板內容不需重新啟動伺服器
+    //res.send(`<h2>Hello World!</h2>`);
 });
 //這個路由只能透過get的方法 後面是路徑 路由定義結束
 
