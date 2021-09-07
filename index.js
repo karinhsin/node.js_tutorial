@@ -16,12 +16,19 @@ app.use('/jquery', express.static('node_modules/jquery/dist'));
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
 // 3. 路由定義開始
-//res.send  res.end   res.render 這三個不能同時用 一次只能用一個
+//res.send  res.end   res.render res.json這幾個不能同時用 一次只能用一個
 app.get('/', (req, res)=>{
     //第二個參數是要傳到樣版的內容
     res.render('home', {name:'Karin'});
     //修改ejs樣板內容不需重新啟動伺服器
     //res.send(`<h2>Hello World!</h2>`);
+});
+app.get('/json-sales', (req, res)=>{
+    const sales = require('./data/sales');
+    res.render('json-sales', { sales });
+    //require可以動態載入 但如果之前有匯入過同樣的檔案 就不會再去重新載入檔案
+    //console.log(sales);
+    //res.json(sales);
 });
 //這個路由只能透過get的方法 後面是路徑 路由定義結束
 
