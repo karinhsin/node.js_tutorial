@@ -30,6 +30,11 @@ app.get('/json-sales', (req, res)=>{
     //console.log(sales);
     //res.json(sales);
 });
+//取得queryString資料 
+//可以透過 req.query.名稱 取得，例如:req.query.a
+app.get('/try-qs',(req, res) => {
+    res.json(req.query);
+});
 //這個路由只能透過get的方法 後面是路徑 路由定義結束
 
 app.use((req, res) => {
