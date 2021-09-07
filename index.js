@@ -6,7 +6,11 @@ const express = require('express');
 // 2. 建立 web server 物件
 const app = express();
 
-app.use(express.static('public'));
+//這邊不要設定太多 管理上會比較麻煩
+app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略
+//如果沒引入進來 就要把jquery跟bootstrap放到public裡面
+app.use('/jquery', express.static('node_modules/jquery/dist'));
+app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
 // 3. 路由定義開始
 app.get('/', (req, res)=>{
