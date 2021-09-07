@@ -32,10 +32,15 @@ app.get('/json-sales', (req, res)=>{
 });
 //取得queryString資料 
 //可以透過 req.query.名稱 取得，例如:req.query.a
-app.get('/try-qs',(req, res) => {
-    res.json(req.query);
+
+//路由的middleware
+//可以用requests.rest看有沒有成功
+const urlencodedParser = express.urlencoded({extended:false})
+const jsonParser =  express.json();
+app.post('/try-post',[urlencodedParser, jsonParser],(req, res) => {
+    res.json(req.body);
 });
-//這個路由只能透過get的方法 後面是路徑 路由定義結束
+//路由定義結束
 
 app.use((req, res) => {
     res.status(404).send(`<h1>找不到頁面</h1>`)
