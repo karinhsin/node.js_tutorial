@@ -9,6 +9,8 @@ const app = express();
 // 註冊樣版引擎
 app.set('view engine','ejs');
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 //這邊不要設定太多 管理上會比較麻煩
 app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略
 //如果沒引入進來 就要把jquery跟bootstrap放到public裡面
@@ -30,16 +32,17 @@ app.get('/json-sales', (req, res)=>{
     //console.log(sales);
     //res.json(sales);
 });
+
 //取得queryString資料 
 //可以透過 req.query.名稱 取得，例如:req.query.a
-
-//路由的middleware
-//可以用requests.rest看有沒有成功
-const urlencodedParser = express.urlencoded({extended:false})
-const jsonParser =  express.json();
-app.post('/try-post',[urlencodedParser, jsonParser],(req, res) => {
+app.get('/try-qs', (req, res) => {
+    res.json(req.query);
+});
+app.post('/try-post', (req, res) => {
     res.json(req.body);
 });
+//路由的middleware
+//可以用requests.rest看有沒有成功
 //路由定義結束
 
 app.use((req, res) => {
@@ -48,8 +51,8 @@ app.use((req, res) => {
 
 //較保險的設定 如果沒有的話就跑3000
 let port = process.env.PORT || 3000;  
-
+const node_env = process.env.NODE_ENV || 'development';
 app.listen(port, ()=>{
-    console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`NODE_ENV: ${node_env}`);
     console.log(`啟動：${port}`,new Date());
 });
