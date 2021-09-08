@@ -78,6 +78,8 @@ app.post('/try-upload', upload.single('avatar'), async (req, res) => {
         res.json({ success: false, error: '格式不對' });
     }
 });//用postman測試檔案是否上傳成功 再到tmp_uploads看照片是否有進到資料夾 照片檔案後面改.jpg後就可以看
+//路由的middleware
+//可以用requests.rest看有沒有成功
 
 app.post('/try-upload2', uploadImg.single('avatar'), async (req, res) => {
     res.json(req.file);
@@ -90,8 +92,27 @@ app.post('/try-upload3', uploadImg.array('photo', 10), async (req, res) => {
 //多個圖檔上傳
 //欄位名稱需為photo
 
-//路由的middleware
-//可以用requests.rest看有沒有成功
+app.get('/my-paramsl/:action/:id(\\d+)?',(req, res)=>{
+    res.json(req.params);
+});
+//路徑要給參數 ex.http://localhost:3001/my-paramsl/edit/12
+app.get('/my-params1/:action?/:id(\\d+)?', (req, res) => {
+    res.json(req.params);
+});
+app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
+    let u = req.url.split('?')[0];
+    u = u.slice(3);
+    u = u.split('-').join('');
+
+    res.json({
+        url: req.url,
+        mobile: u
+    });
+});
+//業務員促銷廣告頁面 可透過手機號碼找到他的頁面
+///^\/m\/09\d{2}-?\d{3}$/
+
+
 //路由定義結束
 
 app.use((req, res) => {
