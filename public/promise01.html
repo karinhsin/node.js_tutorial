@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        //Promise專門用來處理非同步的狀態 ex.ajax 
+        //Promise設定是後面加func 等待的狀態 等事情處理完
+        //正常處理結束就呼叫resolve 發生錯誤就會去叫reject
+        new Promise((resolve, reject) => {
+            setTimeout(()=>{
+                resolve('abc');
+                //reject('my-error'); //會印出Uncaught (in promise) my-error:在promise裡面有錯誤
+                //這邊的錯誤不能用try catch去處理，try catch只能處理同步狀況的錯誤
+            }, 1000);
+        }).then(r=>{ //callbackfunction
+            throw new Error('your error message'); //自訂丟出一個錯誤物件 後面抓得到
+            console.log('2:',r , new Date()); //r是resolve 這裡是等待狀態 等下面那行印ㄔㄨ後一秒鐘才會印出這行
+        }).catch(err=>{
+            console.log('error:',err); 
+            //印出黑色的錯誤（紅色錯誤可能讓Js壞掉) 
+            //寫在then前面的話就只能抓到更前面的錯誤 then裡面的就抓不到了
+        })
+
+        console.log('1:',new Date()); //會先印出這行
+    </script>
+</body>
+</html>

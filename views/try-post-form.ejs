@@ -16,6 +16,7 @@
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password">
                     <!-- locals:在樣板裡的物件 -->
+                    <%# if(typeof email !=='undefined'){ %>
                     <% if(locals.password){ %>
                         <div class="form-text"><%= password %></div>
                     <% } %>
