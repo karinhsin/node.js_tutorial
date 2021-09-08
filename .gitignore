@@ -4,3 +4,4 @@ node_modules
 package-lock.json
 dev.sh
 fontawesome
+tmp_uploads

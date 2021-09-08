@@ -2,6 +2,8 @@ require('dotenv').config(); //載入.env的設定
 
 // 1. 引入 express
 const express = require('express');
+const multer = require('multer');
+const upload = multer({dest:'tmp_uploads/'})//destination
 
 // 2. 建立 web server 物件
 const app = express();
@@ -55,6 +57,14 @@ app.get('/try-post-form', (req, res) => {
 app.post('/try-post-form', (req, res) => {
     res.render('try-post-form', req.body);
 });
+
+app.get('/pending', (req, res) => {
+});
+
+app.post('/try-upload',upload.single('avatar'), (req, res) => {
+    res.json(req.file);
+});//用postman測試檔案是否上傳成功 再到tmp_uploads看照片是否有進到資料夾 照片檔案後面改.jpg後就可以看
+
 //路由的middleware
 //可以用requests.rest看有沒有成功
 //路由定義結束
