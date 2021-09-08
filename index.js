@@ -9,15 +9,22 @@ const app = express();
 // 註冊樣版引擎
 app.set('view engine','ejs');
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+//use:方法
+//提升到Top-level middleware
+//將body-parser設定成頂層middleware，放在所有路由之前，進到所有路由之前都會經過
 //這邊不要設定太多 管理上會比較麻煩
+app.use(express.urlencoded({ extended: false })); //後面沒設{ extended: false }會出錯
+app.use(express.json());
 app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略
+//上面三行是頂層的middleware 下面兩行不太算
+//路徑符合/jquery跟/bootstrap才會進入到後面那邊
 //如果沒引入進來 就要把jquery跟bootstrap放到public裡面
 app.use('/jquery', express.static('node_modules/jquery/dist'));
+
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
 // 3. 路由定義開始
+//路由順序會影響，放前面的優先
 //res.send  res.end   res.render res.json這幾個不能同時用 一次只能用一個
 app.get('/', (req, res)=>{
     //第二個參數是要傳到樣版的內容
@@ -40,6 +47,13 @@ app.get('/try-qs', (req, res) => {
 });
 app.post('/try-post', (req, res) => {
     res.json(req.body);
+});
+//表單資料一般都需要兩個路由
+app.get('/try-post-form', (req, res) => {
+    res.render('try-post-form');
+});
+app.post('/try-post-form', (req, res) => {
+    res.render('try-post-form', req.body);
 });
 //路由的middleware
 //可以用requests.rest看有沒有成功
