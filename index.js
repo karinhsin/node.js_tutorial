@@ -82,6 +82,13 @@ app.post('/try-upload', upload.single('avatar'), async (req, res) => {
 app.post('/try-upload2', uploadImg.single('avatar'), async (req, res) => {
     res.json(req.file);
 });
+//單一檔案上傳
+//欄位名稱需為avatar
+app.post('/try-upload3', uploadImg.array('photo', 10), async (req, res) => {
+    res.json(req.files);
+});
+//多個圖檔上傳
+//欄位名稱需為photo
 
 //路由的middleware
 //可以用requests.rest看有沒有成功

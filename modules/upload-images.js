@@ -10,6 +10,7 @@ const extMap = {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, __dirname + '/../public/img')
+        //放在public所有的用戶都看得到 沒有權限問題
     },
     filename: (req, file, cb) => {
         cb(null, uuidv4() + extMap[file.mimetype]);
