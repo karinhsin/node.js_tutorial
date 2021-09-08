@@ -18,25 +18,30 @@
             });      
         }
 
-        //一定要跟await搭配使用 await放在裡面
-        //運算子 也可以用在箭頭函式
-        //async await 依照我要的順序時使用 真正解決非同步的callback function問題
-        //看似同步但其實還是非同步
-        //可以用try catch去做錯誤處理
-        //原本的then還是callback function 沒辦法用迴圈寫 async awaitd可以用迴圈寫
-        async function func(){
-            const r1 = await myPromise('bill'); //這行結束的結果會傳給r1的變數
-            console.log(r1); //拿到變數後才會印出
+        //async await從頭到尾都還是非同步
+        //但可以讓async依照順序執行
+        //promise比較難用所以建議用async await
+        //以下因為是各跑各的 所以結果是會交錯印出
+        (async() =>{
+            const str = 'helloooooooo';
+            const ar = str.split(' ');
+            
+            for(let i = 0; i < str.length; i++){
+                console.log(await myPromise(str[i]));
+            }
+        })();
+
+        (async() =>{
+            const r1 = await myPromise('bill');
+            console.log(r1); 
             const r2 = await myPromise('peter'); 
             console.log(r2);
             const r3 = await myPromise('aaron'); 
             console.log(r3);
             const r4 = await myPromise('david'); 
             console.log(r4);
-        }
+        })();
 
-        func();
-        console.log('end'); //會先印出這行
     </script>
 </body>
 </html>
