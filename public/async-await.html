@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        function myPromise(p){
+            return new Promise((resolve, reject) => {
+                    const rnd = 300+Math.floor(Math.random()*1000);
+                    setTimeout(()=>{
+                        resolve({p,rnd});
+                    }, rnd);
+            });      
+        }
+
+        //一定要跟await搭配使用 await放在裡面
+        //運算子 也可以用在箭頭函式
+        //async await 依照我要的順序時使用 真正解決非同步的callback function問題
+        //看似同步但其實還是非同步
+        //可以用try catch去做錯誤處理
+        async function func(){
+            const r1 = await myPromise('bill'); //這行結束的結果會傳給r1的變數
+            console.log(r1); //拿到變數後才會印出
+            const r2 = await myPromise('peter'); 
+            console.log(r2);
+            const r3 = await myPromise('aaron'); 
+            console.log(r3);
+            const r4 = await myPromise('david'); 
+            console.log(r4);
+        }
+
+        func();
+        console.log('end'); //會先印出這行
+    </script>
+</body>
+</html>
