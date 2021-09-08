@@ -5,6 +5,7 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
 const upload = multer({dest:'tmp_uploads/'})//destination
+const uploadImg = require('./modules/upload-images');
 
 // 2. 建立 web server 物件
 const app = express();
@@ -63,6 +64,7 @@ app.get('/pending', (req, res) => {
 });
 
 app.post('/try-upload', upload.single('avatar'), async (req, res) => {
+    //上傳圖檔一般會用async方式
     //如果是jpeg檔案就搬到我要的位置 後面加上他原本的檔名
     if (req.file && req.file.mimetype === 'image/jpeg') {
         try {
@@ -71,11 +73,15 @@ app.post('/try-upload', upload.single('avatar'), async (req, res) => {
         } catch (ex) {
             return res.json({ success: false, error: '無法存檔' });
         }
-
     } else {
+        await fs.unlink(req.file.path); //如果上傳的檔案格式是錯的就刪掉暫存檔
         res.json({ success: false, error: '格式不對' });
     }
 });//用postman測試檔案是否上傳成功 再到tmp_uploads看照片是否有進到資料夾 照片檔案後面改.jpg後就可以看
+
+app.post('/try-upload2', uploadImg.single('avatar'), async (req, res) => {
+    res.json(req.file);
+});
 
 //路由的middleware
 //可以用requests.rest看有沒有成功
