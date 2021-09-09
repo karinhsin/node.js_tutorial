@@ -5,6 +5,7 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
 const session = require('express-session');
+const moment = require('moment-timezone');
 const upload = multer({dest:'tmp_uploads/'})//destination
 const uploadImg = require('./modules/upload-images');
 
@@ -137,6 +138,17 @@ app.get('/try-sess',(req, res)=>{
     req.session.myVar = req.session.myVar || 0;
     req.session.myVar++;
     res.json(req.session);
+});
+
+//moment.js
+app.get('/try-moment', (req, res) => {
+    const fm = 'YYYY-MM-DD HH:mm:ss';
+
+    res.json({
+        m1: moment().format(fm),
+        m2: moment().tz('Europe/Berlin').format(fm),
+        m3: moment().tz('Asia/Tokyo').format(fm),
+    });
 });
 
 //路由定義結束
