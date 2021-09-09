@@ -27,11 +27,19 @@ app.use('/jquery', express.static('node_modules/jquery/dist'));
 
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
+//自己定義middleware
+app.use((req, res, next) => {
+    //指定頁面title
+    res.locals.title = 'KK的網站';
+    next();
+});
+
 // 3. 路由定義開始
 //路由順序會影響，放前面的優先
 //res.send  res.end   res.render res.json這幾個不能同時用 一次只能用一個
 app.get('/', (req, res)=>{
     //第二個參數是要傳到樣版的內容
+    res.locals.title = '首頁 - ' + res.locals.title;
     res.render('home', {name:'Karin'});
     //修改ejs樣板內容不需重新啟動伺服器
     //res.send(`<h2>Hello World!</h2>`);
