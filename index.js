@@ -19,6 +19,7 @@ app.set('view engine','ejs');
 //將body-parser設定成頂層middleware，放在所有路由之前，進到所有路由之前都會經過
 //這邊不要設定太多 管理上會比較麻煩
 app.use(session({  //secret一定要設定 其他可以不用但沒設定的話會一直跳warning
+    name: 'mySessionId',
     saveUninitialized: false, //如果還沒用到session的時候要不要儲存
     resave: false, // 沒變更內容是否強制回存 可以把狀況記錄下來
     secret: '加密用的字串', //當作key的加密字串
