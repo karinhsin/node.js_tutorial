@@ -113,6 +113,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 ///^\/m\/09\d{2}-?\d{3}$/
 
 app.use(require('./routes/admin2'));
+app.use('/admin3', require('./routes/admin3'));
 
 //路由定義結束
 
