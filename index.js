@@ -4,6 +4,7 @@ require('dotenv').config(); //載入.env的設定
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
+const session = require('express-session');
 const upload = multer({dest:'tmp_uploads/'})//destination
 const uploadImg = require('./modules/upload-images');
 
@@ -17,6 +18,14 @@ app.set('view engine','ejs');
 //提升到Top-level middleware
 //將body-parser設定成頂層middleware，放在所有路由之前，進到所有路由之前都會經過
 //這邊不要設定太多 管理上會比較麻煩
+app.use(session({  //secret一定要設定 其他可以不用但沒設定的話會一直跳warning
+    saveUninitialized: false, //如果還沒用到session的時候要不要儲存
+    resave: false, // 沒變更內容是否強制回存 可以把狀況記錄下來
+    secret: '加密用的字串', //當作key的加密字串
+    cookie: {
+        maxAge: 1200000, // 20分鐘，單位毫秒
+    }
+}));
 app.use(express.urlencoded({ extended: false })); //後面沒設{ extended: false }會出錯
 app.use(express.json());
 app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略
@@ -122,6 +131,12 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 
 app.use(require('./routes/admin2'));
 app.use('/admin3', require('./routes/admin3'));
+
+app.get('/try-sess',(req, res)=>{
+    req.session.myVar = req.session.myVar || 0;
+    req.session.myVar++;
+    res.json(req.session);
+});
 
 //路由定義結束
 
