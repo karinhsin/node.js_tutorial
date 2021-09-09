@@ -8,6 +8,7 @@ const session = require('express-session');
 const moment = require('moment-timezone');
 const upload = multer({dest:'tmp_uploads/'})//destination
 const uploadImg = require('./modules/upload-images');
+const db = require('./modules/connect-mysql');
 
 // 2. 建立 web server 物件
 const app = express();
@@ -149,6 +150,11 @@ app.get('/try-moment', (req, res) => {
         m2: moment().tz('Europe/Berlin').format(fm),
         m3: moment().tz('Asia/Tokyo').format(fm),
     });
+});
+
+app.get('/try-db', async (req, res) => {
+    const [r] = await db.query("SELECT * FROM address_book WHERE `name` LIKE ?", ['%洋%']);
+    res.json(r);
 });
 
 //路由定義結束
