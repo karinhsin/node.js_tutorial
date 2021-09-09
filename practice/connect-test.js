@@ -11,7 +11,8 @@ const connection = mysql.createConnection({
 });
 
 connection.query(
-    "SELECT * FROM address_book LIMIT 5",
+    "SELECT * FROM address_book LIMIT 2,3",
     (error, r) => {
         console.log(r);
+        process.exit();
     });
