@@ -1,3 +1,5 @@
+//載入連線設定
+//一般只會連一個資料庫
 require('dotenv').config();
 const mysql = require('mysql2');
 
