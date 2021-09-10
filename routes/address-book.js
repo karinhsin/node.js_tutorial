@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/list', async (req, res) => {
+    res.locals.pageName = 'ab-list';
     const perPage = 5;
     let page = parseInt(req.query.page) || 1;
     const output = {

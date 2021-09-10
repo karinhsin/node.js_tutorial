@@ -46,11 +46,12 @@ app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 app.use((req, res, next) => {
     //指定頁面title
     res.locals.title = 'KK的網站';
+    res.locals.pageName = '';
 
     //設定 template的helper function 可以在template裡面使用
     res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
     res.locals.dateToDateTimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
-    
+
     next();
 });
 
@@ -65,6 +66,7 @@ app.get('/', (req, res)=>{
     //res.send(`<h2>Hello World!</h2>`);
 });
 app.get('/json-sales', (req, res)=>{
+    res.locals.pageName = 'json-sales';
     const sales = require('./data/sales');
     res.render('json-sales', { sales });
     //require可以動態載入 但如果之前有匯入過同樣的檔案 就不會再去重新載入檔案
