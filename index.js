@@ -46,6 +46,11 @@ app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 app.use((req, res, next) => {
     //指定頁面title
     res.locals.title = 'KK的網站';
+
+    //設定 template的helper function 可以在template裡面使用
+    res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
+    res.locals.dateToDateTimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
+    
     next();
 });
 
