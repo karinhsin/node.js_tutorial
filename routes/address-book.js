@@ -36,8 +36,8 @@ router.get('/list', async (req, res) => {
         
     }
 
-    res.json(output);
-    // res.render('address-book/list');
+    //res.json(output);
+    res.render('address-book/list', output);
 });
 
 module.exports = router;
