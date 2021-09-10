@@ -5,10 +5,12 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
 const session = require('express-session');
+const MysqlStore = require('express-mysql-session')(session);//require進來是一個func 呼叫func後面再加session
 const moment = require('moment-timezone');
 const upload = multer({dest:'tmp_uploads/'})//destination
 const uploadImg = require('./modules/upload-images');
 const db = require('./modules/connect-mysql');
+const sessionStore = new MysqlStore({}, db);
 
 // 2. 建立 web server 物件
 const app = express();
@@ -24,7 +26,8 @@ app.use(session({  //secret一定要設定 其他可以不用但沒設定的話�
     name: 'mySessionId',
     saveUninitialized: false, //如果還沒用到session的時候要不要儲存
     resave: false, // 沒變更內容是否強制回存 可以把狀況記錄下來
-    secret: '加密用的字串', //當作key的加密字串
+    store: sessionStore,
+    secret: '34908-948fkdgha;kldfha;olfisjl;;asdl', //當作key的加密字串
     cookie: {
         maxAge: 1200000, // 20分鐘，單位毫秒
     }
