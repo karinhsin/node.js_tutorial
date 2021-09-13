@@ -63,9 +63,15 @@
 </div>
 <%- include('../parts/scripts') %> 
 <script>
-    function delete_it(sid){
+    async function delete_it(sid){
         if(confirm(`確定要刪除編號為 ${sid} 的項目嗎？`)){
-            location.href = '/address-book/delete/' + sid;
+            //location.href = '/address-book/delete/' + sid;
+            const r = await fetch('/address-book/delete/' +sid,{
+              method:'DELETE'
+            });
+            const obj = await r.json();
+            console.log(obj);
+            location.reload(); //重新載入頁面
         }
     }
 </script>
