@@ -57,7 +57,42 @@ router.route('/add')
         res.render('address-book/add');
     })
     .post(async (req, res) => {
-        res.json(req.body);
-    });
+        // TODO: 欄位檢查
+        const output = {
+            success: false,
+        }
 
+        const sql = "INSERT INTO `address_book`(" +
+            "`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
+
+        const [result] = await db.query(sql, [
+            req.body.name,
+            req.body.email,
+            req.body.mobile,
+            req.body.birthday,
+            req.body.address,
+        ]);
+
+        output.result = result;
+        if (result.affectedRows && result.insertId) {
+            output.success = true;
+        }
+
+        console.log({ result });
+        /*
+        {
+          result: ResultSetHeader {
+            fieldCount: 0,
+            affectedRows: 1,
+            insertId: 148,
+            info: '',
+            serverStatus: 2,
+            warningStatus: 0
+          }
+        }
+         */
+
+        res.json(output);
+    });
+    
 module.exports = router;
