@@ -10,13 +10,14 @@ async function getListData(req, res) {
     let keyword = req.query.keyword || '';  //搜尋功能 如果沒有值就給空字串
     keyword = keyword.trim();//字串的方法 去掉頭尾的空白
     
-    res.locals.keyword = keyword; // 傳給 template  
+    //res.locals.keyword = keyword; // 傳給 template  
     const output = {
 
     };
     
     let where = " WHERE 1 "; //放sql的條件
     if (keyword) {//如果有值的話
+        output.keyword = keyword;
         where += ` AND \`name\` LIKE ${db.escape('%' + keyword + '%')} `;//把字串兜起來放進去
     }
 

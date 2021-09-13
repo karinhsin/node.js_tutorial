@@ -1,3 +1,4 @@
+<!-- 改寫 前端呈現的html效能會較好 -->
 <!doctype html>
 <html lang="zh">
 <head>
@@ -50,7 +51,51 @@
 </div>
 
 <div class="container">
-    <textarea name="" id="ta" cols="80" rows="10"></textarea>
+<!--    <textarea name="" id="ta" cols="80" rows="10"></textarea>-->
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col"><i class="fas fa-trash-alt"></i></th>
+                    <th scope="col">#</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">手機</th>
+                    <th scope="col">生日</th>
+                    <th scope="col">地址</th>
+                    <th scope="col"><i class="fas fa-edit"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+<!--
+                <tr>
+                    <td>
+                        <a href="javascript: delete_it(134)">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    <td>134</td>
+                    <td>手消基34</td>
+                    <td>6110e0c8eb75a@test.com</td>
+                    <td>0910214595</td>
+                    <td>1993-03-30</td>
+                    <td>台北市</td>
+                    <td>
+                        <a href="/address-book/edit/134">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+-->
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
 </div>
 
 
@@ -58,12 +103,48 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script>
 
+    const itemTpl = o => {
+        return `
+            <tr>
+                <td>
+                    <a href="javascript: delete_it(${o.sid})">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+                <td>${o.sid}</td>
+                <td>${o.name}</td>
+                <td>${o.email}</td>
+                <td>${o.mobile}</td>
+                <td>${o.birthday}</td>
+                <td>${o.address}</td>
+                <td>
+                    <a href="/address-book/edit/${o.sid}">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        `;
+    };
+
+
     fetch('/address-book/api/list')
     .then(r=>r.json())
     .then(data=>{
         console.log(data);
-        document.querySelector('#ta').value = JSON.stringify(data, null, 4);
+        // document.querySelector('#ta').value = JSON.stringify(data, null, 4);
+        let str = '';
 
+        /*
+        寫法一
+        if(data.rows && data.rows.length){
+            data.rows.forEach(el =>{
+                str  += itemTpl(el);
+            });
+        }
+         */
+
+         //寫法二 較簡潔但可讀性比較差
+        document.querySelector('tbody').innerHTML = data.rows.map(el=>itemTpl(el)).join('');
     });
 </script>
 </body>
