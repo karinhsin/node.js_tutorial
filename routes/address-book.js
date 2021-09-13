@@ -12,11 +12,18 @@ router.get('/list', async (req, res) => {
     res.locals.pageName = 'ab-list';
     const perPage = 5;
     let page = parseInt(req.query.page) || 1;
+    let keyword = req.query.keyword || '';  //搜尋功能 如果沒有值就給空字串
+    res.locals.keyword; //傳給template
     const output = {
 
     };
+    
+    let where = "WHERE 1"; //放sql的條件
+    if(keyword){//如果有值的話
+        where += ` AND \`name\` LIKE ${db.escape('%' + keyword + '%')} `;//把字串兜起來放進去
+    }
 
-    const t_sql = "SELECT COUNT(1) totalRows FROM address_book ";
+    const t_sql = `SELECT COUNT(1) totalRows FROM address_book ${where}`;
     const [[{ totalRows }]] = await db.query(t_sql);
     output.totalRows = totalRows;
     output.totalPages = Math.ceil(totalRows/perPage); //算出總頁數
@@ -32,7 +39,7 @@ router.get('/list', async (req, res) => {
         if (page > output.totalPages){
             return res.redirect('?page=' + output.totalPages);
         }
-        const sql = `SELECT * FROM \`address_book\` ORDER BY sid DESC LIMIT ${(page - 1) * perPage}, ${perPage}`;
+        const sql = `SELECT * FROM \`address_book\` ${where} ORDER BY sid DESC LIMIT ${(page - 1) * perPage}, ${perPage}`;
         const [rows] = await db.query(sql)
         output.rows = rows;
         
@@ -85,7 +92,7 @@ router.route('/add')
             output.error = ex.toString();
         }
         output.result = result;
-        if (result.affectedRows && result.insertId) {
+        if (result.affectedRows && result.insertId) { 
             output.success = true;
         }
 
