@@ -45,17 +45,31 @@
 
     function checkForm(){
         const fd = new FormData(document.form1);
+        // const usp = new URLSearchParams(new FormData(document.form1));
+         // console.log(usp.toString());
+
+
 
         //以multipart/form-data的格式送出
         //Content-Type自動設定 不需再額外設定
-        fetch('',{
-            method: 'POST',
-            body: fd
-        }).then(r=>r.json()).then(obj=>{
-            console.log(obj);
-        });
-    }
+        //要到address-book那邊的get用upload.none()當middleware
+    //     fetch('',{
+    //         method: 'POST',
+    //         body: fd
+    //     }).then(r=>r.json()).then(obj=>{
+    //         console.log(obj);
+    //     });
+    // }
 
+    fetch('',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body:new URLSearchParams(fd).toString(),
+    }).then(r=>r.json()).then(obj=>{
+        console.log(obj);
+    });
 
 </script>
 <%- include('../parts/html-foot') %>

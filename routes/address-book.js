@@ -56,7 +56,7 @@ router.route('/add')
         res.locals.pageName = 'ab-add'; //表示選到新增資料的表單頁面
         res.render('address-book/add');
     })
-    .post(upload.none(), async (req, res) => {
+    .post(async (req, res) => {
         res.json(req.body);
     });
 
