@@ -45,6 +45,8 @@
 </div>
 <%- include('../parts/scripts') %>
 <script>
+
+
     function checkForm(){
         // TODO: 欄位檢查
 
@@ -59,11 +61,14 @@
         }).then(r=>r.json()).then(obj=>{
             console.log(JSON.stringify(obj, null, 4));
             if(obj.success){
-                location.href ='/address-book/list';
+                alert('資料修改成功');
             } else {
-                alert('資料無法新增成功\n' + (obj.error || ''));
+                alert(obj.error || '資料修改失敗');
             }
         });
+
     }
+
+
 </script>
 <%- include('../parts/html-foot') %>
