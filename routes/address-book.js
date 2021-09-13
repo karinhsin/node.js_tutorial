@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./../modules/connect-mysql');
+const upload = require('./../modules/upload-images');
 
 const router = express.Router();
 
@@ -55,8 +56,8 @@ router.route('/add')
         res.locals.pageName = 'ab-add'; //表示選到新增資料的表單頁面
         res.render('address-book/add');
     })
-    .post(async (req, res) => {
-        res.json({});
+    .post(upload.none(), async (req, res) => {
+        res.json(req.body);
     });
 
 module.exports = router;

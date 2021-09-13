@@ -44,7 +44,16 @@
     // TODO: 欄位檢查
 
     function checkForm(){
+        const fd = new FormData(document.form1);
 
+        //以multipart/form-data的格式送出
+        //Content-Type自動設定 不需再額外設定
+        fetch('',{
+            method: 'POST',
+            body: fd
+        }).then(r=>r.json()).then(obj=>{
+            console.log(obj);
+        });
     }
 
 
