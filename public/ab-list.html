@@ -52,6 +52,21 @@
 
 <div class="container">
 <!--    <textarea name="" id="ta" cols="80" rows="10"></textarea>-->
+
+<div class="row">
+        <div class="col">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!--
+                    <li class="page-item active">
+                        <a class="page-link" href="?keyword=%E6%89%8B&amp;page=1">1</a>
+                    </li>
+                    -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <table class="table table-bordered table-striped">
@@ -102,7 +117,12 @@
 <script src="/jquery/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script>
-
+    const pagiTpl = o => {
+        return `
+            <li class="page-item ${o.active}">
+                <a class="page-link" href="${o.page}">${o.page}</a>
+            </li>`;
+    };
     const itemTpl = o => {
         return `
             <tr>
@@ -145,6 +165,18 @@
 
          //寫法二 較簡潔但可讀性比較差
         document.querySelector('tbody').innerHTML = data.rows.map(el=>itemTpl(el)).join('');
+        // 頁碼
+        str = '';
+        for(let i=data.page-5; i<=data.page+5; i++){
+            if(i>=1 && i<=data.totalPages){
+                str += pagiTpl({
+                    active: data.page===i ? 'active' : '',
+                    page: i,
+                })
+            }
+        }
+        document.querySelector('.pagination').innerHTML = str;
+
     });
 </script>
 </body>
