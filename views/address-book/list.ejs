@@ -61,4 +61,12 @@
     </div>
   </div>
 </div>
-<%- include('../parts/scripts') %> <%- include('../parts/html-foot') %>
+<%- include('../parts/scripts') %> 
+<script>
+    function delete_it(sid){
+        if(confirm(`確定要刪除編號為 ${sid} 的項目嗎？`)){
+            location.href = '/address-book/delete/' + sid;
+        }
+    }
+</script>
+<%- include('../parts/html-foot') %>
