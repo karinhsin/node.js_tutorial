@@ -62,16 +62,22 @@ router.route('/add')
             success: false,
         }
 
-        const sql = "INSERT INTO `address_book`(" +
-            "`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
+        // const sql = "INSERT INTO `address_book`(" +
+        //     "`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
 
-        const [result] = await db.query(sql, [
-            req.body.name,
-            req.body.email,
-            req.body.mobile,
-            req.body.birthday,
-            req.body.address,
-        ]);
+        //寫法一 傳統做法 跟php幾乎一樣 要注意下面的順序 順序是這邊決定的  跟前台表單欄位的順序沒有關係
+        // const [result] = await db.query(sql, [
+        //     req.body.name,
+        //     req.body.email,
+        //     req.body.mobile,
+        //     req.body.birthday,
+        //     req.body.address,
+        // ]);
+
+        //寫法二 不管順序 比較容易看 但出錯機率可能會比較高 
+        const input = {...req.body,created_at: new Date()}; 
+        const sql = "INSERT INTO `address_book` SET ?";
+        const[result]= await db.query(sql,[input]);
 
         output.result = result;
         if (result.affectedRows && result.insertId) {
