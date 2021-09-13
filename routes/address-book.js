@@ -105,5 +105,25 @@ router.route('/add')
 
         res.json(output);
     });
+
+router.route('/edit/:sid')
+    .get(async (req, res) => { //呈現要修改資料的表單 如果沒有資料就呈現列表頁
+        const sql = "SELECT * FROM address_book WHERE sid=?";
+        const [rs] = await db.query(sql, [req.params.sid]);
+
+        if (rs.length) {
+            res.render('address-book/edit', { row: rs[0] });
+        } else {
+            res.redirect('/address-book/list');
+        }
+    })
+    .post(async (req, res) => {
+        // TODO: 欄位檢查
+        const output = {
+            success: false,
+            postData: req.body,
+        }
+        res.json(output);
+    });
     
 module.exports = router;
