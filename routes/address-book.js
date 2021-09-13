@@ -4,22 +4,19 @@ const upload = require('./../modules/upload-images');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render('address-book/main');
-});
-
-router.get('/list', async (req, res) => {
-    res.locals.pageName = 'ab-list';
+async function getListData(req, res) {
     const perPage = 5;
     let page = parseInt(req.query.page) || 1;
     let keyword = req.query.keyword || '';  //搜尋功能 如果沒有值就給空字串
-    res.locals.keyword; //傳給template
+    keyword = keyword.trim();//字串的方法 去掉頭尾的空白
+    
+    res.locals.keyword = keyword; // 傳給 template  
     const output = {
 
     };
     
-    let where = "WHERE 1"; //放sql的條件
-    if(keyword){//如果有值的話
+    let where = " WHERE 1 "; //放sql的條件
+    if (keyword) {//如果有值的話
         where += ` AND \`name\` LIKE ${db.escape('%' + keyword + '%')} `;//把字串兜起來放進去
     }
 
@@ -34,19 +31,39 @@ router.get('/list', async (req, res) => {
     //如果有資料才去取得分頁的資料
     if(totalRows > 0){
         if(page < 1){
-            return res.redirect('?page=1');
+            output.redirect = '?page=1';
+            return output;
         }
         if (page > output.totalPages){
-            return res.redirect('?page=' + output.totalPages);
+            output.redirect = '?page=' + output.totalPages;
+            return output;
+            
         }
         const sql = `SELECT * FROM \`address_book\` ${where} ORDER BY sid DESC LIMIT ${(page - 1) * perPage}, ${perPage}`;
         const [rows] = await db.query(sql)
         output.rows = rows;
-        
     }
+    return output;
+}
 
-    //res.json(output);
+router.get('/', (req, res) => {
+    res.render('address-book/main');
+});
+
+router.get('/list', async (req, res) => {
+    res.locals.pageName = 'ab-list';
+
+
+    const output = await getListData(req, res);
+    if (output.redirect) {
+        return res.redirect(output.redirect)
+    }
     res.render('address-book/list', output);
+});
+
+router.get('/api/list', async (req, res) => {
+    const output = await getListData(req, res);
+    res.json(output);
 });
 
 //0-9數字 ]後面的＋代表一個以上
