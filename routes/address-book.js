@@ -44,9 +44,19 @@ router.get('/list', async (req, res) => {
 //0-9數字 ]後面的＋代表一個以上
 router.delete('/delete/:sid([0-9]+)', async (req, res) => {
     const sql = "DELETE FROM address_book WHERE sid=?";
-    
+
     const [r] = await db.query(sql, [req.params.sid]);
     console.log({ r });
     res.json(r);
 });
+
+router.route('/add')
+    .get(async (req, res) => {
+        res.locals.pageName = 'ab-add'; //表示選到新增資料的表單頁面
+        res.render('address-book/add');
+    })
+    .post(async (req, res) => {
+        res.json({});
+    });
+
 module.exports = router;
