@@ -77,8 +77,13 @@ router.route('/add')
         //寫法二 不管順序 比較容易看 但出錯機率可能會比較高 
         const input = {...req.body,created_at: new Date()}; 
         const sql = "INSERT INTO `address_book` SET ?";
-        const[result]= await db.query(sql,[input]);
-
+        let result = {};
+        //處理新增資料時可能的錯誤
+        try{
+            [result]= await db.query(sql,[input]);
+        }catch(ex){
+            output.error = ex.toString();
+        }
         output.result = result;
         if (result.affectedRows && result.insertId) {
             output.success = true;

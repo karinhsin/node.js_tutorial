@@ -70,7 +70,12 @@
         },
         body:new URLSearchParams(fd).toString(),
     }).then(r=>r.json()).then(obj=>{
-        console.log(obj);
+        console.log(JSON.stringify(obj, null,4));
+        if(obj.success){
+            location.href = '/address-book/list';
+        }else{
+            alert('資料無法新增成功\n' + (obj.error || ''));
+        }
     });
 
      /*  jquery寫法
