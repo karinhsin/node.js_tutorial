@@ -34,7 +34,16 @@ app.use(session({  //secret一定要設定 其他可以不用但沒設定的話�
     }
 }));
 //同樣都是用use也有優先順序的問題
-app.use(cors()); //要放在字形檔的前面
+const corsOptions = {
+    credentials:true, 
+    origin:(origin,cb) =>{
+        console.log(`origin: + ${origin}`);
+            cb(null, true);
+            //需要使用cookies 和session時(使用白名單)
+            //來拜訪的主機如果在白名單內就允許 沒有的話就不允許
+    }
+};
+app.use(cors(corsOptions)); //要放在字形檔的前面
 app.use(express.urlencoded({ extended: false })); //後面沒設{ extended: false }會出錯
 app.use(express.json());
 app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略

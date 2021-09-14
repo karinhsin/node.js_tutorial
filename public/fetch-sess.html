@@ -15,10 +15,16 @@
 
 <script>
     function getData() {
-        fetch('/try-sess').then(r=>r.json()).then(data=>{
-            document.querySelector('#ta').value = JSON.stringify(data, null, 4);
-        });
-    }//會帶cookie出去
+        //用live server看
+        fetch('http://localhost:3001/try-sess',{
+            credentials: "include" // cross origin 傳送 cookie
+        })
+          .then(r=>r.json())
+            .then(data=>{
+                document.querySelector('#ta').value = JSON.stringify(data, null, 4);
+            });
+    }
+    //到http://localhost:5500/public/fetch-sess.html 看myvar有沒有跟著跳 有的話才代表request有送出去
 </script>
 </body>
 </html>
