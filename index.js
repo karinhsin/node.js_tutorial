@@ -4,6 +4,7 @@ require('dotenv').config(); //載入.env的設定
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
+const cors = require('cors');
 const session = require('express-session');
 const MysqlStore = require('express-mysql-session')(session);//require進來是一個func 呼叫func後面再加session
 const moment = require('moment-timezone');
@@ -32,6 +33,8 @@ app.use(session({  //secret一定要設定 其他可以不用但沒設定的話�
         maxAge: 1200000, // 20分鐘，單位毫秒
     }
 }));
+//同樣都是用use也有優先順序的問題
+app.use(cors()); //要放在字形檔的前面
 app.use(express.urlencoded({ extended: false })); //後面沒設{ extended: false }會出錯
 app.use(express.json());
 app.use(express.static('public')); //public相當於放在根目錄底下 前面'/'可省略
