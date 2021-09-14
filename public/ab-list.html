@@ -144,10 +144,11 @@
     <script src="/jquery/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script>
-      const pagiTpl = o => {
+
+    const pagiTpl = o => {
         return `
             <li class="page-item ${o.active}">
-                <a class="page-link" href="javascript: getListData({page: ${o.page}})">${o.page}</a>
+                <a class="page-link" href="#${o.page}">${o.page}</a>
             </li>`;
     };
 
@@ -173,10 +174,11 @@
             </tr>
         `;
     };
-          
-        const render = (data)=>{
+
+    const render = (data)=>{
         document.querySelector('tbody').innerHTML = data.rows.map(el=>itemTpl(el)).join('');
-         // 頁碼
+
+        // 頁碼
         str = '';
         for(let i=data.page-5; i<=data.page+5; i++){
             if(i>=1 && i<=data.totalPages){
@@ -188,8 +190,8 @@
         }
         document.querySelector('.pagination').innerHTML = str;
     };
-     
-      const getListData = (opt={}) => {
+
+    const getListData = (opt={}) => {
         opt.page = opt.page || 1;
         opt.keyword = opt.keyword || '';
         const usp = new URLSearchParams();
@@ -206,7 +208,18 @@
             });
     }
 
-    getListData();
-    </script>
+    const whenHashChanged = ()=>{
+        console.log(location.hash);
+
+        let h = location.hash.slice(1); // 丟掉最前面 #
+        h = parseInt(h) || 1;
+        getListData({ page: h});
+    };
+    //hash會用history記錄起來 缺點是只能放一個字串 太複雜的話url也會醜醜的
+    window.addEventListener('hashchange', whenHashChanged);
+
+    whenHashChanged();
+
+</script>
   </body>
 </html>
