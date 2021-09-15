@@ -6,6 +6,7 @@ const multer = require('multer');
 const fs = require('fs').promises;
 const cors = require('cors');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 const MysqlStore = require('express-mysql-session')(session);//require進來是一個func 呼叫func後面再加session
 const moment = require('moment-timezone');
 const upload = multer({dest:'tmp_uploads/'})//destination
@@ -55,7 +56,7 @@ app.use('/jquery', express.static('node_modules/jquery/dist'));
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
 //自己定義middleware
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     //指定頁面title
     res.locals.title = 'KK的網站';
     res.locals.pageName = '';
@@ -66,6 +67,19 @@ app.use((req, res, next) => {
 
     res.locals.session = req.session; // 把session的資料傳到ejs
 
+    // jwt 驗證
+    req.myAuth = null; //自訂的屬性myAuth，錯誤跟沒給都是空值
+    const auth = req.get('Authorization');
+    if (auth && auth.indexOf('Bearer ') === 0) {
+        const token = auth.slice(7); //token切下來
+        try {
+            //有內容就設定在req.myAuth
+            req.myAuth = await jwt.verify(token, process.env.JWT_SECRET);
+            console.log('req.myAuth:', req.myAuth);
+        } catch (ex) {
+            console.log('jwt-ex:',ex);
+        }
+    }
     next();
 });
 

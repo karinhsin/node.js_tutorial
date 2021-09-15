@@ -122,22 +122,13 @@ router.get('/get-data-jwt', async (req, res) => {
         data: null
     }
 
-    // jwt 驗證
-    const auth = req.get('Authorization');
-    if (auth && auth.indexOf('Bearer ') === 0) {
-        const token = auth.slice(7);
-        try {
-            const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
-            output.member = decoded;
-            output.success = true;
-            output.data = await getListData(req, res);
-
-        } catch (ex) {
-            output.error = 'token 錯誤';
-        }
+    // 判斷在middleware的時候有沒有通過 jwt 驗證
+    if (req.myAuth && req.myAuth.id) {
+        output.member = req.myAuth;
+        output.success = true;
+        output.data = await getListData(req, res);
     } else {
-        output.error = '沒有 token';
+        output.error = '沒有 token或者token不合法';
     }
 
     res.json(output);
