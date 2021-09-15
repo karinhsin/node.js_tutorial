@@ -21,7 +21,39 @@ router.get('/register', (req, res) => {
     res.render('register');
 });
 router.post('/register', async (req, res) => {
-    res.json(req.body);
+    const output = {
+        success: false,
+        postData: req.body,
+        error: ''
+    };
+    // TODO: 欄位檢查
+
+    const hash = await bcrypt.hash(req.body.password, 10);
+
+    const sql = "INSERT INTO `members`" +
+        "(`email`, `password`, `mobile`, `birthday`, `nickname`, `create_at`)" +
+        " VALUES (?, ?, ?, ?, ?, NOW())";
+
+    let result;
+    try {
+        [result] = await db.query(sql, [
+            req.body.email,
+            hash,
+            req.body.mobile,
+            req.body.birthday,
+            req.body.nickname,
+        ]);
+        if (result.affectedRows === 1) {
+            output.success = true;
+        } else {
+            output.error = '無法新增會員';
+        }
+    } catch (ex) {
+        console.log(ex);
+        output.error = 'Email 已被使用過';
+    }
+
+    res.json(output);
 });
 
 // 登出

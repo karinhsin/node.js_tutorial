@@ -44,7 +44,7 @@
 
 
     function checkForm(){
-        
+
         // TODO: 欄位檢查
 
 
@@ -60,7 +60,7 @@
             console.log(JSON.stringify(obj, null, 4));
             if(obj.success){
                 alert('註冊成功');
-                //location.href ='/address-book/list';
+                location.href ='/login';
             } else {
                 alert('註冊失敗\n' + (obj.error || ''));
             }
