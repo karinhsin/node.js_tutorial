@@ -12,7 +12,7 @@ router.post('/login', async (req, res) => {
 
 // 註冊
 router.get('/register', (req, res) => {
-    res.json({});
+    res.render('register');
 });
 router.post('/register', async (req, res) => {
     res.json({});
