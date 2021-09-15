@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="//localhost:3001/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="//localhost:3001/fontawesome/css/all.css">
-    <title>小新的網站</title>
+    <title>KK的網站</title>
 </head>
 <body>
 
@@ -36,8 +36,21 @@
     const ta = document.querySelector('#ta');
 
     function getData(){
+        // 取得 token
+        const token = localStorage.getItem('token');
+        if(!token){
+            alert('沒有 token');
+            return;
+        }
 
-        fetch('/get-data-jwt').then(r=>r.json()).then(obj=>{
+        //確認發request的時候有檔頭
+        fetch('/get-data-jwt', {
+            method: 'GET',
+            headers: {
+                //注意Bearer後面有空格
+                Authorization: 'Bearer ' + token
+            }
+        }).then(r=>r.json()).then(obj=>{
             ta.value = JSON.stringify(obj, null, 4);
         });
     }
