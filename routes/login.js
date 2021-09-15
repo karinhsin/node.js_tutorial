@@ -108,6 +108,7 @@ router.post('/login-jwt', async (req, res) => {
         // req.session.member = {id, email, nickname};
 
         output.success = true;
+        output.member = {id, email, nickname};
         output.token = await jwt.sign({ id, email, nickname }, process.env.JWT_SECRET);
     }
     res.json(output);
