@@ -110,16 +110,36 @@ router.post('/login-jwt', async (req, res) => {
         // req.session.member = {id, email, nickname};
 
         output.success = true;
-        output.member = {id, email, nickname};
+        output.member = { id, email, nickname };
         output.token = await jwt.sign({ id, email, nickname }, process.env.JWT_SECRET);
     }
     res.json(output);
 });
 
 router.get('/get-data-jwt', async (req, res) => {
-    const data = await getListData(req, res);
+    const output = {
+        success: false,
+        data: null
+    }
 
-    res.json(data);
+    // jwt 驗證
+    const auth = req.get('Authorization');
+    if (auth && auth.indexOf('Bearer ') === 0) {
+        const token = auth.slice(7);
+        try {
+            const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+            output.member = decoded;
+            output.success = true;
+            output.data = await getListData(req, res);
+
+        } catch (ex) {
+            output.error = 'token 錯誤';
+        }
+    } else {
+        output.error = '沒有 token';
+    }
+
+    res.json(output);
 });
-
 module.exports = router;
