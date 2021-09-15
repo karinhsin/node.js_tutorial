@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const db = require('./../modules/connect-mysql');
 const upload = require('./../modules/upload-images');
 

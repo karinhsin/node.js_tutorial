@@ -1,9 +1,14 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
+
+const db = require('./../modules/connect-mysql');
+const upload = require('./../modules/upload-images');
 
 const router = express.Router();
 
 // 登入
 router.get('/login', (req, res) => {
+    res.locals.pageName = 'login';
     res.json({});
 });
 router.post('/login', async (req, res) => {
@@ -12,10 +17,11 @@ router.post('/login', async (req, res) => {
 
 // 註冊
 router.get('/register', (req, res) => {
+    res.locals.pageName = 'register';
     res.render('register');
 });
 router.post('/register', async (req, res) => {
-    res.json({});
+    res.json(req.body);
 });
 
 // 登出

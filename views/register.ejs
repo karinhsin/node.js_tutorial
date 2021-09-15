@@ -44,7 +44,7 @@
 
 
     function checkForm(){
-        /*
+        
         // TODO: 欄位檢查
 
 
@@ -59,13 +59,12 @@
         }).then(r=>r.json()).then(obj=>{
             console.log(JSON.stringify(obj, null, 4));
             if(obj.success){
-                location.href ='/address-book/list';
+                alert('註冊成功');
+                //location.href ='/address-book/list';
             } else {
-                alert('資料無法新增成功\n' + (obj.error || ''));
+                alert('註冊失敗\n' + (obj.error || ''));
             }
         });
-
-*/
     }
 
 
