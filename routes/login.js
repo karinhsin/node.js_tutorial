@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const db = require('./../modules/connect-mysql');
 const upload = require('./../modules/upload-images');
@@ -84,6 +85,32 @@ router.get('/account-check', async (req, res) => {
 router.get('/logout', (req, res) => {
     delete req.session.member;
     res.redirect('/');
+});
+
+//把資料加密成token丟給用戶端
+router.post('/login-jwt', async (req, res) => {
+    const output = {
+        success: false,
+        token: null,
+    };
+    // TODO: 欄位檢查
+
+    const [rs] = await db.query("SELECT * FROM members WHERE `email`=?", [req.body.email]);
+
+    if (!rs.length) {
+        // 帳號錯誤
+        return res.json(output);
+    }
+
+    const success = await bcrypt.compare(req.body.password, rs[0].password);
+    if (success) {
+        const { id, email, nickname } = rs[0];
+        // req.session.member = {id, email, nickname};
+
+        output.success = true;
+        output.token = await jwt.sign({ id, email, nickname }, process.env.JWT_SECRET);
+    }
+    res.json(output);
 });
 
 module.exports = router;
