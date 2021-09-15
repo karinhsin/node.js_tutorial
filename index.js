@@ -64,6 +64,8 @@ app.use((req, res, next) => {
     res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
     res.locals.dateToDateTimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
 
+    res.locals.session = req.session; // 把session的資料傳到ejs
+
     next();
 });
 

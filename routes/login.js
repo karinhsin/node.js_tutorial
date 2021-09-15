@@ -82,7 +82,8 @@ router.get('/account-check', async (req, res) => {
 
 // 登出
 router.get('/logout', (req, res) => {
-    res.json({});
+    delete req.session.member;
+    res.redirect('/');
 });
 
 module.exports = router;
