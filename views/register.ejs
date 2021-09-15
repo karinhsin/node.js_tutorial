@@ -41,6 +41,32 @@
 </div>
 <%- include('parts/scripts') %>
 <script>
+    const email = document.querySelector('#email');
+
+    const keyHandler = event=>{
+        // console.log(event.type, event.key);
+        // TODO: 檢查格式是否符合 email 格式
+
+        const usp = new URLSearchParams();
+        usp.set('email', email.value.toLowerCase().trim());
+        //email沒給值就會跳錯
+
+        fetch('/account-check?' + usp).then(r=>r.json()).then(data=>{
+            if(data.used){
+                // email 已被使用
+                email.style.border = '2px solid red';
+            } else {
+                email.style.border = '1px solid #CCCCCC';
+            }
+        });
+
+    }
+
+    // email.addEventListener('keydown', keyHandler);
+    // email.addEventListener('keyup', keyHandler);
+    // email.addEventListener('keypress', keyHandler);
+    email.addEventListener('input', keyHandler);
+
 
 
     function checkForm(){
@@ -65,6 +91,8 @@
                 alert('註冊失敗\n' + (obj.error || ''));
             }
         });
+
+
     }
 
 

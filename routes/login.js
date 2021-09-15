@@ -56,6 +56,12 @@ router.post('/register', async (req, res) => {
     res.json(output);
 });
 
+router.get('/account-check', async (req, res) => {
+    const sql = "SELECT 1 FROM members WHERE `email`=?";
+    const [rs] = await db.query(sql, [req.query.email]);
+    res.json({ used: !!rs.length });
+});
+
 // 登出
 router.get('/logout', (req, res) => {
     res.json({});
