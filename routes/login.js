@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const db = require('./../modules/connect-mysql');
 const upload = require('./../modules/upload-images');
 
+const { getListData } = require('./address-book');
+
 const router = express.Router();
 
 // 登入
@@ -112,6 +114,12 @@ router.post('/login-jwt', async (req, res) => {
         output.token = await jwt.sign({ id, email, nickname }, process.env.JWT_SECRET);
     }
     res.json(output);
+});
+
+router.get('/get-data-jwt', async (req, res) => {
+    const data = await getListData(req, res);
+
+    res.json(data);
 });
 
 module.exports = router;

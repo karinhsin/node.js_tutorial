@@ -48,6 +48,8 @@ async function getListData(req, res) {
     return output;
 }
 
+router.getListData = getListData; // 將 function 掛在 router 物件上做匯出
+
 router.get('/', (req, res) => {
     res.render('address-book/main');
 });
