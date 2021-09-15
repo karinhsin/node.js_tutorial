@@ -12,7 +12,25 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 router.post('/login', async (req, res) => {
-    res.json({});
+    // TODO: 欄位檢查
+    //把email拿進來 找到那筆資料（因為是唯一鍵所以只會拿到一筆或沒有）
+    const [rs] = await db.query("SELECT * FROM members WHERE `email`=?", [req.body.email]);
+
+    if(!rs.length){
+        //帳號錯誤
+        return res.json({success:false}); //如果沒有資料就直接回應沒有登入成功
+    }
+
+    //比對密碼
+    const success = await bcrypt.compare(req.body.password,rs[0].password);
+    if(success){
+        const{id, email, nickname} = rs[0];
+        req.session.member = { id, email, nickname};
+    }
+
+    res.json({ success }); //成功直接success
+    //到http://localhost:3001/login登入試試看
+    //karin@gmail.com  kk
 });
 
 // 註冊
