@@ -11,7 +11,19 @@ router.get('/', async (req, res) => {
 
 // 讀取單筆
 router.get('/:id', async (req, res) => {
-
+    const output = {
+        success: false,
+        // status: '',
+        // statusCode: 0,
+        data: null,
+    };
+    const sql = "SELECT * FROM products WHERE sid=?";
+    const [rs] = await db.query(sql, [req.params.id]);
+    if (rs && rs.length === 1) {
+        output.success = true;
+        output.data = rs[0];
+    }
+    res.json(output);
 });
 
 // 新增
