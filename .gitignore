@@ -5,3 +5,4 @@ package-lock.json
 dev.sh
 fontawesome
 tmp_uploads
+.vscode
