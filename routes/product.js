@@ -24,6 +24,14 @@ router.get('/:id', async (req, res) => {
     res.json(output);
 });
 
+// 測試用
+router.get('/test01/2', async (req, res) => {
+
+    const p1 = await Product.findOne(2);
+    p1.data.price *= 2;
+
+    res.json(await p1.save());
+});
 // 新增
 router.post('/', async (req, res) => {
 
