@@ -17,7 +17,7 @@ router.get('/:id', async (req, res) => {
         success: false,
         data: null,
     };
-    output.data = await Product.readOne(req.params.id);
+    output.data = await Product.findOne(req.params.id);
     if (output.data) {
         output.success = true;
     }
