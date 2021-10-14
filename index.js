@@ -204,7 +204,12 @@ app.post('/test_avatar', uploadImg.none(), async (req, res) => {
     const sql = "INSERT INTO `test_avatar`(`avatar`, `name`) VALUES (?, ?)";
     const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
     res.json(r);
-
+});
+app.get('/test_avatar/:id', async (req, res) => {
+    const sql = "SELECT * FROM `test_avatar` WHERE sid=?";
+    const [r] = await db.query(sql, [req.params.id]);
+    res.json(r[0] ? r[0] : {});
+});
 
 // *** 路由定義結束 :END
 
