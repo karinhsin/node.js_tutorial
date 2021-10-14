@@ -7,7 +7,7 @@ const router = express.Router();
 
 // 列表
 router.get('/', async (req, res) => {
-
+    res.json({ test: 1 });
 });
 
 // 讀取單筆 async後面都是路由處理器
@@ -34,7 +34,8 @@ router.get('/test01/2', async (req, res) => {
 });
 // 新增
 router.post('/', async (req, res) => {
-
+    const p1 = new Product(req.body);
+    res.json(await p1.save());
 });
 
 // 修改
