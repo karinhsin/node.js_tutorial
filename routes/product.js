@@ -54,6 +54,7 @@ router.put('/:id', async (req, res) => {
     }
     res.json(output);
 });
+//到postman>PUT>輸入路徑>body>raw>JSON>輸入要修改的資料後送出
 
 // 刪除
 router.delete('/:id', async (req, res) => {
