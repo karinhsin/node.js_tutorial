@@ -201,8 +201,9 @@ app.get('/try-db', async (req, res) => {
 });
 
 app.post('/test_avatar', uploadImg.none(), async (req, res) => {
-    res.json(req.body);
-});
+    const sql = "INSERT INTO `test_avatar`(`avatar`, `name`) VALUES (?, ?)";
+    const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
+    res.json(r);
 
 
 // *** 路由定義結束 :END
