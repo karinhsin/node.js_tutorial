@@ -200,7 +200,7 @@ app.get('/try-db', async (req, res) => {
 
 });
 
-app.post('/test_avatar', async (req, res) => {
+app.post('/test_avatar', uploadImg.none(), async (req, res) => {
     res.json(req.body);
 });
 
