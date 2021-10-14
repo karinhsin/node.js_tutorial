@@ -194,11 +194,18 @@ app.get('/try-moment', (req, res) => {
 });
 
 app.get('/try-db', async (req, res) => {
-    const [r] = await db.query("SELECT * FROM address_book WHERE `name` LIKE ?", ['%洋%']);
+    const [r] = await db.query("SELECT * FROM address_book WHERE `name` LIKE ?", ['%新%']);
+
     res.json(r);
+
 });
 
-//路由定義結束
+app.post('/test_avatar', async (req, res) => {
+    res.json(req.body);
+});
+
+
+// *** 路由定義結束 :END
 
 app.use((req, res) => {
     res.status(404).send(`<h1>找不到頁面</h1>`)
