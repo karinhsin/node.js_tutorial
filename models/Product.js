@@ -9,12 +9,18 @@ class Product {
         // `sid`, `author`, `bookname`, `category_sid`, `book_id`, `publish_date`, `pages`, `price`, `isbn`, `on_sale`, `introduction`
         this.data = defaultObj;
     }
-    
+
     /* 讀取所有資料, 要有篩選的功能 */
     static async findAll(options = {}) {
         let op = {
             perPage: 5,
             page: 1,
+            orderBy: '',
+
+            category: null,
+            priceLow: 0,
+            priceHigh: 0,
+            keyword: '',
         };
         const output = {
             perPage: op.perPage,
