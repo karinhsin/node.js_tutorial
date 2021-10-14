@@ -210,6 +210,12 @@ app.get('/test_avatar/:id', async (req, res) => {
     const [r] = await db.query(sql, [req.params.id]);
     res.json(r[0] ? r[0] : {});
 });
+app.put('/test_avatar/:id', uploadImg.none(), async (req, res) => {
+    const sql = "UPDATE `test_avatar` SET ? WHERE sid=?";
+    const [r] = await db.query(sql, [req.body, req.params.id]);
+    res.json(r);
+});
+
 
 // *** 路由定義結束 :END
 
