@@ -58,8 +58,11 @@ router.put('/:id', async (req, res) => {
 
 // 刪除
 router.delete('/:id', async (req, res) => {
-
+    const p1 = await Product.findOne(req.params.id);
+    if (p1) {
+        return res.json(await p1.remove());
+    }
+    res.json({ info: 'item not found!' });
 });
-
 
 module.exports = router;

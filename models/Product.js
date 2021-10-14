@@ -53,6 +53,11 @@ class Product {
         }
         return await this.save();
     }
+    async remove() {
+        const sql = `DELETE FROM ${tableName} WHERE ${pkField}=?`;
+        const [r] = await db.query(sql, [this.data.sid]);
+        return r;
+    }
 }
 
 module.exports = Product;
