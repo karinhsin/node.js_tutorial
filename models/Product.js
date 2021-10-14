@@ -44,6 +44,15 @@ class Product {
             return r;
         }
     }
+    async edit(obj = {}) {
+        for (let i in this.data) {
+            if (i === pkField) continue;//如果i的值是primary key 就跳過
+            if (obj[i]) {
+                this.data[i] = obj[i];
+            }
+        }
+        return await this.save();
+    }
 }
 
 module.exports = Product;

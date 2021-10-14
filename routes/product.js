@@ -32,6 +32,7 @@ router.get('/test01/2', async (req, res) => {
 
     res.json(await p1.save());
 });
+// TODO: 管理的功能, 需要登入後才能操作
 // 新增
 router.post('/', async (req, res) => {
     const p1 = new Product(req.body);
@@ -40,7 +41,18 @@ router.post('/', async (req, res) => {
 
 // 修改
 router.put('/:id', async (req, res) => {
-
+    const output = {
+        success: false,
+        result:null,
+    };
+    const p1 = await Product.findOne(req.params.id);
+    //先去找到那筆
+    if(p1){ 
+        //如果有東西才去做修改的動作
+        output.success = true;
+        output.result = await p1.edit(req.body);
+    }
+    res.json(output);
 });
 
 // 刪除
