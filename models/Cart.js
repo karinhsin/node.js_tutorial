@@ -57,20 +57,19 @@ class Cart {
         output.cartList = await Cart.getList(member_id);
         return output;
     }
-
-    async edit(obj = {}) {
-        for (let i in this.data) {
-            if (i === pkField) continue;//如果i的值是primary key 就跳過
-            if (obj[i]) {
-                this.data[i] = obj[i];
-            }
-        }
-        return await this.save();
+    // 變更數量
+    static async update(member_id, product_id, quantity) {
+        // TODO:
     }
-    async remove() {
-        const sql = `DELETE FROM ${tableName} WHERE ${pkField}=?`;
-        const [r] = await db.query(sql, [this.data.sid]);
-        return r;
+
+    // 移除項目
+    static async remove(member_id, product_id) {
+        // TODO:
+    }
+
+    // 清空購物車
+    static async clear(member_id) {
+        // TODO:
     }
 }
 

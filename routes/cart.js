@@ -29,15 +29,17 @@ router.post('/', async (req, res) => {
 
 // 修改項目
 router.put('/:id', async (req, res) => {
-
+    res.json(await Cart.update(req.myAuth.id, req.body.product_id, req.body.quantity));
 });
 
 // 刪除項目
 router.delete('/:id', async (req, res) => {
-
+    res.json(await Cart.remove(req.myAuth.id, req.body.product_id));
 });
 
 // 清空購物車
-
+router.delete('/', async (req, res) => {
+    res.json(await Cart.clear(req.myAuth.id));
+});
 
 module.exports = router;
