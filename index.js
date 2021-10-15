@@ -175,6 +175,7 @@ app.use('/',require('./routes/login'));
 app.use('/admin3', require('./routes/admin3'));
 app.use('/address-book', require('./routes/address-book'));
 app.use('/product', require('./routes/product'));
+app.use('/cart', require('./routes/cart'));
 
 app.get('/try-sess',(req, res)=>{
     req.session.myVar = req.session.myVar || 0;
