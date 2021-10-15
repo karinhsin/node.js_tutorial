@@ -21,6 +21,7 @@ class Product {
             priceLow: 0,
             priceHigh: 0,
             keyword: '',
+            ...options
         };
         const output = {
             perPage: op.perPage,
@@ -29,14 +30,28 @@ class Product {
             totalPages: 0,
             rows: [],
         };
-        const t_sql = `SELECT COUNT(1) totalRows FROM ${tableName}`;
+        let where = ' WHERE 1 ';
+        if (op.category) {
+            where += ' AND category_sid=' + parseInt(op.category) + ' ';
+        }
+        if (op.keyword) {
+            where += ' AND bookname LIKE ' + db.escape('%' + op.keyword + '%') + ' ';
+        }
+        if (op.priceLow) {
+            where += ' AND price >= ' + parseInt(op.priceLow) + ' ';
+        }
+        if (op.priceHigh) {
+            where += ' AND price <= ' + parseInt(op.priceHigh) + ' ';
+        }
+
+        const t_sql = `SELECT COUNT(1) totalRows FROM ${tableName} ${where}`;
         const [t_rs] = await db.query(t_sql);
         const totalRows = t_rs[0].totalRows;
 
         if (totalRows > 0) {
             output.totalRows = totalRows;
             output.totalPages = Math.ceil(totalRows / op.perPage);
-            const sql = `SELECT * FROM ${tableName} LIMIT ${(op.page - 1) * op.perPage}, ${op.perPage}`;
+            const sql = `SELECT * FROM ${tableName} ${where}LIMIT ${(op.page - 1) * op.perPage}, ${op.perPage}`;
             const [rs] = await db.query(sql);
             output.rows = rs;
         }
