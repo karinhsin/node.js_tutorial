@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // 新增項目
+//在models裡面不會拿到request這個物件
 router.post('/', async (req, res) => {
     // req.body.product_id
     // req.body.quantity

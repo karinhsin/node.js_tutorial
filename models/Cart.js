@@ -12,38 +12,13 @@ class Cart {
     }
 
     /* 讀取所有資料, 要有篩選的功能 */
-    static async getList(options = {}) {
-        let op = {
-            perPage: 5,
-            page: 1,
-
-            orderBy: '',
-
-            category: null,
-            priceLow: 0,
-            priceHigh: 0,
-            keyword: '',
-        };
-        const output = {
-            perPage: op.perPage,
-            page: op.page,
-            totalRows: 0,
-            totalPages: 0,
-            rows: [],
-        };
-        const t_sql = `SELECT COUNT(1) totalRows FROM ${tableName}`;
-        const [t_rs] = await db.query(t_sql);
-        const totalRows = t_rs[0].totalRows;
-
-        if (totalRows > 0) {
-            output.totalRows = totalRows;
-            output.totalPages = Math.ceil(totalRows / op.perPage);
-            const sql = `SELECT * FROM ${tableName} LIMIT ${(op.page - 1) * op.perPage}, ${op.perPage}`;
-            const [rs] = await db.query(sql);
-            output.rows = rs;
-        }
-
-        return output;
+    static async getList(member_id) {
+        const sql = `SELECT c.*, p.bookname, p.price  FROM carts c
+                        JOIN products p 
+                        ON p.sid=c.product_id
+                    WHERE member_id=? ORDER BY created_at`;
+        const [rs] = await db.query(sql, [member_id]);
+        return rs;
     }
 
     //透過商品id找項目
@@ -79,6 +54,7 @@ class Cart {
         const sql = `INSERT INTO carts SET ?`;
         const [r] = await db.query(sql, [obj]);
         output.success = !!r.affectedRows ? true : false;
+        output.cartList = await Cart.getList(member_id);
         return output;
     }
 
