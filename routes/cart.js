@@ -21,7 +21,9 @@ router.get('/', async (req, res) => {
 
 // 新增項目
 router.post('/', async (req, res) => {
-
+    // req.body.product_id
+    // req.body.quantity
+    res.json(await Cart.add(req.myAuth.id, req.body.product_id, req.body.quantity));
 });
 
 // 修改項目

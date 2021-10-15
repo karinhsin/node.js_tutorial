@@ -1,9 +1,10 @@
-const db = require('../modules/connect-mysql');
+const db = require('./../modules/connect-mysql');
 
-const tableName = 'products';
+const tableName = 'carts';
 const pkField = 'sid';
 
-class Product {
+
+class Cart {
 
     constructor(defaultObj = {}) {
         // `sid`, `author`, `bookname`, `category_sid`, `book_id`, `publish_date`, `pages`, `price`, `isbn`, `on_sale`, `introduction`
@@ -11,10 +12,11 @@ class Product {
     }
 
     /* 讀取所有資料, 要有篩選的功能 */
-    static async findAll(options = {}) {
+    static async getList(options = {}) {
         let op = {
             perPage: 5,
             page: 1,
+
             orderBy: '',
 
             category: null,
@@ -44,40 +46,42 @@ class Product {
         return output;
     }
 
-    //讀取單筆資料
+    //透過商品id找項目
     //static靜態方法（類別）
     //類別：規格
-    static async findOne(pk = 0) {
-        const sql = `SELECT * FROM ${tableName} WHERE ${pkField}=?`;
-        const [rs] = await db.query(sql, [pk]);
+    static async findItem(member_id = 0, product_id = 0) { //因為可能會不知道sid是多少 所以用product_id來找 會員id商品id跟數量三個都要給才可以
+        const sql = `SELECT * FROM ${tableName} WHERE member_id=? AND product_id=?`;
+        const [rs] = await db.query(sql, [member_id, product_id]);
         if (rs && rs.length === 1) {
-            // return rs[0];
-            return new Product(rs[0])
+            return rs[0];
         }
         return null;
     }
-    toJSON() {
-        return this.data;
-    }
-    toString() {
-        return JSON.stringify(this.data, null, 4);
-    }
-    async save() {
-        // 若有 PK 則表示要做修改
-        if (this.data.sid) {
-            const sid = this.data.sid;
-            const data = { ...this.data };
-            delete data.sid;
-            const sql = `UPDATE ${tableName} SET ? WHERE ${pkField}=?`;
-            const [r] = await db.query(sql, [data, sid]);
-            return r;
-        } else {
-            // 沒有 PK 則表示要做新增
-            const sql = `INSERT INTO ${tableName} SET ?`;
-            const [r] = await db.query(sql, [this.data]);
-            return r;
+
+    static async add(member_id, product_id, quantity) {
+        const output = {
+            success: false,
+            error: ''
         }
+        // TODO: 三個參數都必須要有資料
+
+        // 不要重複輸入資料
+        if (await Cart.findItem(member_id, product_id)) {
+            output.error = "資料重複了";
+            return output;
+        }
+
+        //TODO:三個參數都必須要有資料
+        const obj = {
+            member_id, product_id, quantity
+        };
+
+        const sql = `INSERT INTO carts SET ?`;
+        const [r] = await db.query(sql, [obj]);
+        output.success = !!r.affectedRows ? true : false;
+        return output;
     }
+
     async edit(obj = {}) {
         for (let i in this.data) {
             if (i === pkField) continue;//如果i的值是primary key 就跳過
@@ -94,4 +98,4 @@ class Product {
     }
 }
 
-module.exports = Product;
+module.exports = Cart;
